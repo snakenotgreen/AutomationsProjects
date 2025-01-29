@@ -92,14 +92,18 @@ with sync_playwright() as p:
         browser = browser_type.launch(headless=False)
         page = browser.new_page()
         page.goto("https://robota.ua/ru/my/recommendations")
-        print(page.get_by_label('Поиск по профессии, компании, навыку').fill('Викладач python'))
-        page.get_by_role("button #_ngcontent-app-desktop-c52").click()
+        page.get_by_label('Поиск по профессии, компании, навыку').fill('Викладач python')
+        page.wait_for_selector('.santa-block.santa-typo-regular-bold.secondary-white-normal')
+        page.locator('.santa-block santa-typo-regular-bold secondary-white-normal').click()
+        # page.get_by_role("button").click('#santa-block santa-typo-regular-bold secondary-white-normal')
+        # page.get_by_role("button #_ngcontent-app-desktop-c52").click()
+
         # print(page.get_by_text('Викладач'))
         # print(page.get_by_text('Викладач'))
-        a = str(page.content())
+        # a = str(page.content())
         # print(a)
-        with open('a.txt', 'w', encoding='utf-8') as f:
-            f.write(a)
+        # with open('a.txt', 'w', encoding='utf-8') as f:
+        #     f.write(a)
 
         # print(expect(page).to_have_title(re.compile('Robota.ua')))
         browser.close()
