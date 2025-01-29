@@ -102,5 +102,4 @@ with sync_playwright() as p:
             f.write(a)
 
         # print(expect(page).to_have_title(re.compile('Robota.ua')))
-        # print(page.content())
         browser.close()
