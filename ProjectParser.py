@@ -9,4 +9,5 @@ with sync_playwright() as p:
         print(expect(page).to_have_title(re.compile('Robota.ua')))
         # print(page.content())
         browser.close()
-        print('tqeadsaqq ;:')
+        print('a')
+        print('tqead')
