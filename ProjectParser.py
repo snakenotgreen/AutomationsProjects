@@ -89,14 +89,15 @@ text = """<!DOCTYPE html><html lang="ru"><head><script src="https://connect.face
 # print(re.search('Викладач', text).start())
 with sync_playwright() as p:
     for browser_type in [p.chromium]:
-        browser = browser_type.launch(headless=False)
-        page = browser.new_page()
-        page.goto("https://robota.ua/ru/my/recommendations")
-        page.get_by_label('Поиск по профессии, компании, навыку').fill('Викладач python')
-        page.wait_for_selector('.santa-block.santa-typo-regular-bold.secondary-white-normal')
-        page.locator('.santa-block santa-typo-regular-bold secondary-white-normal').click()
+        browser = browser_type.launch(headless=False) #тіло браузера
+        page = browser.new_page() #тіло сторінки
+        page.goto("https://robota.ua/ru/my/recommendations") #перехід на сторінку
+        page.get_by_label('Поиск по профессии, компании, навыку').fill('Викладач python') #заповнюємо поле інпута пошуком по підпису(label) цього інпута
+        # page.wait_for_selector('.santa-block.santa-typo-regular-bold.secondary-white-normal')
+        # page.locator('.santa-block santa-typo-regular-bold secondary-white-normal').click()
         # page.get_by_role("button").click('#santa-block santa-typo-regular-bold secondary-white-normal')
         # page.get_by_role("button #_ngcontent-app-desktop-c52").click()
+        page.locator("div").click(position={'x': 1534, 'y': 75})
 
         # print(page.get_by_text('Викладач'))
         # print(page.get_by_text('Викладач'))
