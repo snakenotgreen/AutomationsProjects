@@ -38,6 +38,7 @@ with sync_playwright() as p:
         # # кнопка повернутися
         # page.locator('xpath=/html/body/app-root/div/alliance-jobseeker-vacancy-page/div/alliance-root-page-desktop/article/div[1]/div/div[1]/div/lib-top-bar/div/santa-button/button').click()
         # print(href, '\n',distant, job_title, salary, date, description)
+        # # aa
         try:
             while x <= int(num_of_vacan(vacan)):
                 try:
