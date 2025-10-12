@@ -1,7 +1,7 @@
+import hashlib
 import os
 import sys
 #class filemanager
-
 file_type_categories = {
     'jpeg': 'Зображення', 'jpg': 'Зображення', 'png': 'Зображення',
     'gif': 'Зображення', 'svg': 'Зображення', 'bmp': 'Зображення',
@@ -33,8 +33,8 @@ file_type_categories = {
     'torrent': 'Торренти', 'log': 'Лог-файли', 'bak': 'Резервні копії'
 }
 # a = input("Введіть шлях до вашої теки")
-path = "E:/Videos"
-print(path)
+path = "D:\Загрузки".replace("\\", '/')
+
 data = os.listdir(path) #всі файли теки
 data_and_ext = {} #назви файлів і розширення
 fold_to_create = set() #папки що потрібно стоврити
@@ -43,6 +43,7 @@ items_to_transfer = []
 folders_for_transfer = []
 
 #отримуємо список всіх потрібних розширень для створення
+
 for x in data:
     if '.' not in x:
         continue
@@ -64,11 +65,9 @@ for folder in fold_to_create:
 try:
     with os.scandir(path) as entries:
         for entry in entries:
-            print(entry)
             if entry.is_dir() and entry.name in fold_to_create:
                 created_dirs.append(entry.name)
                 fold_to_create.remove(entry.name)
-                print(entry.name)
 except KeyError:
     pass
 except FileNotFoundError:
@@ -88,7 +87,6 @@ try:
     for extens, files in data_and_ext.items():
         fold = file_type_categories.get(extens)
         for file in files:
-            print(f'{path}/{file}',f'{path}/{fold}/{file}')
             os.rename(f'{path}/{file}',f'{path}/{fold}/{file}')
 except FileNotFoundError:
     pass
