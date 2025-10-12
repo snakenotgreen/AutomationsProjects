@@ -1,0 +1,4 @@
+make context menu for choosing folder
+
+make UI for exe (maybe PYqt)
+
