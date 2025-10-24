@@ -1,9 +1,10 @@
 import hashlib
 import os
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QFileDialog
+from PyQt6.QtWidgets import QApplication, QWidget, QFileDialog,QMessageBox, QErrorMessage
+from pathlib import Path
 
-#class filemanager
+# #class filemanager
 file_type_categories = {
     'jpeg': 'Зображення', 'jpg': 'Зображення', 'png': 'Зображення',
     'gif': 'Зображення', 'svg': 'Зображення', 'bmp': 'Зображення',
@@ -34,14 +35,16 @@ file_type_categories = {
     'ttf': 'Шрифти', 'otf': 'Шрифти', 'woff': 'Шрифти', 'woff2': 'Шрифти',
     'torrent': 'Торренти', 'log': 'Лог-файли', 'bak': 'Резервні копії'
 }
-
+#
 app = QApplication([])
 window = QWidget()
 window.setWindowTitle('FirstApp')
-file = QFileDialog()
-fileName, _ = QFileDialog.getOpenFileName(parent=window)
-if fileName:
-    path = os.path.dirname(fileName)
+error_dialog = QErrorMessage()
+error_dialog.setWindowTitle('Помилка!')
+dir_path = QFileDialog.getExistingDirectoryUrl()
+
+if dir_path:
+    path = dir_path.path()[1:]#бо слеш на початку
 
 data = os.listdir(path) #всі файли теки
 data_and_ext = {} #назви файлів і розширення
@@ -51,9 +54,13 @@ items_to_transfer = []
 folders_for_transfer = []
 
 #отримуємо список всіх потрібних розширень для створення
+
+
+
 def get_ext():
     global data_and_ext
     for x in data:
+        print(x)
         if '.' not in x:
             continue
         extension = x.split('.')[-1] #extension
@@ -62,6 +69,9 @@ def get_ext():
             data_and_ext[extension].append(x)
         else:
             data_and_ext[extension] = [x]
+    print(data_and_ext)
+
+
 
 def get_folders_to_create_and_transfer():
     global fold_to_create, folders_for_transfer
@@ -76,7 +86,7 @@ def get_folders_to_create_and_transfer():
     try:
         with os.scandir(path) as entries:
             for entry in entries:
-                if entry.is_dir() and entry.name in fold_to_create:
+                if entry.is_dir() and entry.name in fold_to_create and entry.name.split('_')[0] in fold_to_create:
                     created_dirs.append(entry.name)
                     fold_to_create.remove(entry.name)
     except KeyError:
@@ -96,12 +106,17 @@ def creating_folders(path1):
     except FileExistsError:
         pass
 
+print(data_and_ext)
 def transfer_files(path1):
+    global data_and_ext
     try:
         for extens, files in data_and_ext.items():
+            print(extens)
             fold = file_type_categories.get(extens)
             for file in files:
-                os.rename(f'{path1}/{file}',f'{path1}/{fold}/{file}')
+                pass
+                # print(f'{path1}/{file}',f'{path1}/{fold}/{file}')
+                # os.rename(f'{path1}/{file}',f'{path1}/{fold}/{file}')
     except FileNotFoundError:
         pass
 
@@ -109,6 +124,67 @@ def transfer_files(path1):
 get_ext()
 get_folders_to_create_and_transfer()
 creating_folders(path)
-transfer_files(path)
+transfer_files(path) # тут помилка
 
-
+#
+#
+# #РЕАЛІЗАЦІЯ ПАПОК
+# if dir_path:
+#     path = dir_path.path()[1:]#бо слеш на початку
+#
+#
+# #потрібно отримати назви усіх папок по яким ітеруватися
+# size = 0
+# dirs = []
+#
+#
+# #отримуємо список папок по шляху
+# for file in os.scandir(path):#бо слеш на початку
+#     if file.is_dir():
+#         dirs.append(file.name)
+#
+#
+# #отримуємо список папок що потрібно буде проаналізувати (з врахуванням формату "dir_2.5gb")
+# new_dirs = []
+# for y in dirs:
+#     if y in file_type_categories.values() or y.split('_')[0] in file_type_categories.values():
+#         new_dirs.append(y)
+#
+#
+# #отримуємо розмір папки
+# def get_size(start_path = '.'):
+#     total_size = 0
+#     for dirpath, dirnames, filenames in os.walk(start_path):
+#         for f in filenames:
+#             fp = os.path.join(dirpath, f)
+#             if not os.path.islink(fp):
+#                 total_size += os.path.getsize(fp)
+#     if total_size:
+#         if 0 > total_size > 125:
+#             return f"{total_size / 1024:.2f}" + 'B'
+#         elif 1048576 > total_size > 125:
+#             return f"{total_size/1024:.2f}" + 'KB'
+#
+#         elif 1073741824 > total_size > 1048576:
+#             return f"{total_size / 1048576:.2f}" + 'MB'
+#
+#         elif 1099511627776 > total_size > 1073741824:
+#             return f"{total_size / 1073741824:.2f}" + 'GB'
+#         else:
+#             return f"{total_size / pow(1024, 4):.2f}" + 'TB'
+#     else:
+#         return 0
+#
+# try:
+#     if dirs:
+#         #ітерація по папкам для перейменування
+#         for x in dirs:
+#             p = str(path)+"/"+x
+#             size = get_size(p)
+#             if "_" in p:
+#                 os.rename(p, p.split('_')[0] + "_" + size)
+#             else:
+#                 os.rename(p, p + "_" + size)
+# except FileExistsError:
+#     error_dialog.showMessage(f'Файли мають однакові назви')
+#     app.exec()

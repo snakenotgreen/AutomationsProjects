@@ -1,9 +1,10 @@
-make context menu for choosing folder ##
-
-make UI for exe (maybe PYqt) ##
++make context menu for choosing folder
 
 add folder OTHERS for other extensions
 
 calculate weight of each folder and add to name (example: Photos_3.4gb)
 
-!make working exe
+make working exe
+
+make all errors for excepts
+
